@@ -1,60 +1,69 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+
 
 public class ladderController {
 
-    private String[][] ladder;
+    private List<List> ladder = new ArrayList<>();
+    private int ladderHeight;
+    private int playerSize;
+
+    public void startLadderGame(){
+        loadInput(new UserInput());
+    }
+
+    public void loadInput(UserInput userInput) {
+        List<String> playerList = userInput.getPlayerList();
+        playerSize = playerList.size();
+        ladder.add(playerList);
+        ladderHeight = userInput.getLadderHeight();
+        createLadder();
+    }
 
     public void createLadder() {
-        System.out.println("플레이어의 수를 입력해주세요");
-        int ladderX = integerInput();
-        System.out.println("최대 사다리 높이는 몇 개 인가요?");
-        int ladderY = integerInput();
-        ladder = new String[ladderY][ladderX * 2 - 1];
+        for (int i = 0; i < ladderHeight; i++) {
+            ladder.add(new ArrayList<String>());
+        }
         drawLadder();
     }
 
     public void drawLadder() {
-        for (int i = 0; i < ladder.length; i++) {
-            ladderDrawColumn(i);
+        for (int i = 1; i <= ladderHeight; i++) {
             ladderDrawLine(i);
         }
-    }
-
-    public void ladderDrawColumn(int ladderYNumber) {
-        for (int i = 0; i < ladder[ladderYNumber].length; i += 2) {
-            ladder[ladderYNumber][i] = "ㅣ";
-        }
+        testPrintList();
     }
 
     public void ladderDrawLine(int ladderYNumber) {
-        for (int i = 1; i < ladder[ladderYNumber].length; i += 2) {
-            ladder[ladderYNumber][i] = randomSetLine();
+        for (int i = 0; i < playerSize; i++) {
+            randomSetLine(ladderYNumber, i);
         }
     }
 
-    public String randomSetLine() {
-        if (randomBoolean())
-            return " ";
-        return "-";
+    public void randomSetLine(int ladderYNumber, int index) {
+        if(index != 0 && ladder.get(ladderYNumber).get(index - 1).equals("-----")){
+            ladder.get(ladderYNumber).add("     ");
+            return;
+        }
+        if(randomBoolean()){
+            ladder.get(ladderYNumber).add("-----");
+            return;
+        }
+        ladder.get(ladderYNumber).add("     ");
+    }
+
+    public void testPrintList(){
+        for(int i = 0; i< ladder.size(); i++){
+            for(int j = 0; j<ladder.get(i).size(); j++){
+                System.out.print(ladder.get(i).get(j));
+            }
+            System.out.println();
+        }
     }
 
     public boolean randomBoolean() {
         Random random = new Random();
         return random.nextBoolean();
-    }
-
-
-    public void printLadder() {
-        Printer printer = new Printer();
-        for (int i = 0; i < ladder.length; i++) {
-            printer.oneLineStack(ladder[i]);
-        }
-        printer.printResult();
-    }
-
-    public int integerInput() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
     }
 }
