@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ladderController {
 
-    private List<List> ladder = new ArrayList<>();
+    private List<List<String>> ladder = new ArrayList<>();
     private int ladderHeight;
     private int playerSize;
 
@@ -32,11 +32,14 @@ public class ladderController {
         for (int i = 1; i <= ladderHeight; i++) {
             ladderDrawLine(i);
         }
-        testPrintList();
+        Output output = new Output(ladder);
+        output.firstLineBuild();
+        output.bodyLineBuild();
+        output.testOutput();
     }
 
     public void ladderDrawLine(int ladderYNumber) {
-        for (int i = 0; i < playerSize; i++) {
+        for (int i = 0; i < playerSize-1; i++) {
             randomSetLine(ladderYNumber, i);
         }
     }
