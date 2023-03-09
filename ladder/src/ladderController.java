@@ -56,8 +56,4 @@ public class ladderController {
             System.out.println();
         }
     }
-
-    public String[][] getLadder(){
-        return ladder;
-    }
 }
